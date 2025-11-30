@@ -58,4 +58,165 @@ All tasks were implemented entirely in **Python**.
 - GR identifies sand–shale alternations
 - Neutron–Density logs confirm porosity patterns
 - Resistivity highlights potential hydrocarbon zones
-- Correlation matrix
+- Correlation matrix supports log consistency
+
+---
+
+## 1.3 – Initial CT-Based Porosity Estimation
+**Objective:** Estimate porosity using a raw CT slice.
+
+**Workflow**
+- Imported grayscale CT
+- Applied Non-Local Means denoising
+- Performed Otsu threshold segmentation
+- Created binary pore map and labeled pores
+- Calculated porosity and pore-size distribution
+
+**Outputs**
+- Binary pore image
+- Labeled pore regions
+- Pore-size histogram
+- Porosity estimate
+
+---
+
+# Task 2 — Core Poro-Perm Analysis & Machine Learning
+
+## 2.1 – Data Cleaning
+**Objective:** Remove invalid and unrealistic measurements.
+
+**Steps**
+- Loaded core dataset
+- Removed negative/invalid values
+- Removed missing values
+- Filtered outliers
+- Summarized cleaned data
+
+**Output**
+- task2_1_cleaned_poroperm_FINAL.csv
+
+---
+
+## 2.2 – Exploratory Data Analysis
+**Visualizations**
+- Porosity vs Permeability (by facies)
+- Porosity & Permeability distributions
+- Boxplots by facies
+- Depth trends
+- P–P plots
+
+**Key Insights**
+- Channel facies have highest porosity & permeability
+- Overbank facies have restricted reservoir quality
+- Porosity generally decreases with depth
+- Permeability strongly facies-controlled
+
+---
+
+## 2.3 – Machine Learning Models
+**Models**
+- Linear Regression
+- K-Means Clustering
+- Random Forest
+- Support Vector Machine (SVM)
+- Artificial Neural Network (ANN)
+
+**Outputs**
+- R² values
+- Silhouette scores
+- Confusion matrices
+- Precision/Recall/F1 scores
+
+**Findings**
+- Random Forest achieved the best accuracy
+- Linear regression shows moderate poro-perm correlation
+- ANN limited by dataset size
+
+---
+
+# Task 3 — X-ray CT Image Analysis
+
+## 3.1 – Preprocessing
+**Steps**
+- Imported CT image
+- Applied denoising
+- Normalized and enhanced contrast
+- Smoothed for segmentation
+
+**Output**
+- task3_1_preprocessed_ct.png
+
+---
+
+## 3.2 – Segmentation & Visualization
+**Steps**
+- Displayed grayscale CT
+- Plotted intensity histogram
+- Segmented pores using Otsu threshold
+- Created binary pore map
+- Labeled connected pore bodies
+- Generated pore-size heatmap
+
+**Outputs**
+- task3_2_binary_pores.png
+- task3_2_labeled_pores.png
+- Pore-size heatmap
+
+---
+
+## 3.3 – Porosity & Permeability Computation
+**Computed**
+- Porosity from pore-pixel ratio
+- Pore-size statistics
+- Permeability using Kozeny–Carman
+
+**Key Results**
+- Porosity: ≈ 17.7%
+- Mean pore diameter: ≈ 16.5 px
+- Permeability: ≈ 1.24 × 10⁻¹² m² (≈ 1250 mD)
+
+**Output**
+- task3_3_ct_results_summary.txt
+
+---
+
+# Integrated Interpretation
+
+The project uses three independent datasets:
+
+### Task 1 — Well Logs
+→ Identifies lithology, porosity variation, and possible hydrocarbon zones
+
+### Task 2 — Core + Machine Learning
+→ Predicts reservoir quality using facies and statistical relationships
+
+### Task 3 — CT Imaging
+→ Direct pore-scale quantification of porosity & permeability
+
+**All three methods agree:**
+- Channel facies have high porosity and permeability
+- Overbank facies have lower reservoir quality
+- Trends are consistent across logs, cores, CT images, and ML models
+
+---
+
+# How to Run the Project
+
+1. Place all CSV files, images, and scripts in the same folder.
+2. Run tasks in order:
+
+   Task 1.1 → Task 1.2 → Task 1.3  
+   Task 2.1 → Task 2.2 → Task 2.3  
+   Task 3.1 → Task 3.2 → Task 3.3
+
+3. Outputs (figures + text) will be automatically saved/displayed.
+
+---
+
+# Authors — PETE 219 Group Project
+- Railee Fernandez
+- Raphael Miclat
+- Khalifa Sadiq
+- Ayaan Shaikh
+- Abdulrahman El Edrisi
+"""
