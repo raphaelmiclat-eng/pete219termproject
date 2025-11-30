@@ -214,8 +214,8 @@ The project uses three independent datasets:
 ---
 
 # Authors — PETE 219 Group Project
+- Abdulrahman El Edrisi
+- Ayaan Shaikh
+- Khalifa Sadiq
 - Railee Fernandez
 - Raphael Miclat
-- Khalifa Sadiq
-- Ayaan Shaikh
-- Abdulrahman El Edrisi
