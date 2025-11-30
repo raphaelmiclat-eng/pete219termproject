@@ -219,4 +219,3 @@ The project uses three independent datasets:
 - Khalifa Sadiq
 - Ayaan Shaikh
 - Abdulrahman El Edrisi
-"""
