@@ -199,8 +199,6 @@ print("Labeled pore image saved as: task3_2_labeled_pores.png")
 
 #Task 3.3
 
-# PETE 219 – TASK 3.3: CT-BASED POROSITY & PERMEABILITY
-
 
 import numpy as np
 import matplotlib.pyplot as plt
