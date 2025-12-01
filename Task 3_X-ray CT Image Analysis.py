@@ -92,7 +92,7 @@ print("Preprocessed image saved as: task3_1_preprocessed_ct.png")
 
 #Task 3.2
 
-# PETE 219 – TASK 3.2: CT IMAGE SEGMENTATION & VISUALIZATION (FINAL)
+
 
 
 import numpy as np
