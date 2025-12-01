@@ -2,9 +2,9 @@
 import pandas as pd
 import numpy as np
 
-# ===============================
+
 # 1. LOAD PORO-PERM DATA
-# ===============================
+
 
 df_pp = pd.read_csv("poro_perm_data.csv")
 
@@ -17,25 +17,25 @@ print(df_pp.info())
 print("\nStatistics:")
 print(df_pp.describe(include='all'))
 
-# ===============================
+
 # 2. MISSING VALUES CHECK
-# ===============================
+
 
 print("\nMissing values per column:")
 print(df_pp.isnull().sum())
 
-# ===============================
+
 # 3. REMOVE NON-PHYSICAL VALUES
 # Porosity >= 0
 # Permeability >= 0
-# ===============================
+
 
 df_pp.loc[df_pp["Porosity (%)"] < 0, "Porosity (%)"] = np.nan
 df_pp.loc[df_pp["Permeability (mD)"] < 0, "Permeability (mD)"] = np.nan
 
-# ===============================
+
 # 4. OUTLIER DETECTION (1%–99%)
-# ===============================
+
 
 outlier_report = {}
 
@@ -48,9 +48,9 @@ for col in ["Depth (ft)", "Porosity (%)", "Permeability (mD)"]:
 print("\nOutliers detected (outside 1%-99% range):")
 print(outlier_report)
 
-# ===============================
+
 # 5. REMOVE EXTREME OUTLIERS
-# ===============================
+
 
 for col in ["Depth (ft)", "Porosity (%)", "Permeability (mD)"]:
     q1 = df_pp[col].quantile(0.01)
@@ -61,10 +61,10 @@ for col in ["Depth (ft)", "Porosity (%)", "Permeability (mD)"]:
 print("\nAfter removing extreme outliers:")
 print(df_pp.isnull().sum())
 
-# ===============================
+
 # 6. CLEAN FILL STRATEGY
 # Interpolation + Median fill
-# ===============================
+
 
 df_pp.interpolate(method="linear", inplace=True)
 
@@ -73,18 +73,18 @@ df_pp["Facies"].fillna(method="ffill", inplace=True)
 for col in ["Depth (ft)", "Porosity (%)", "Permeability (mD)"]:
     df_pp[col].fillna(df_pp[col].median(), inplace=True)
 
-# ===============================
+
 # 7. ENFORCE PHYSICAL LIMITS (FINAL SAFETY FIX)
-# ===============================
+
 
 df_pp.loc[df_pp["Porosity (%)"] < 0, "Porosity (%)"] = 0
 df_pp.loc[df_pp["Porosity (%)"] > 45, "Porosity (%)"] = 45
 
 df_pp.loc[df_pp["Permeability (mD)"] < 0, "Permeability (mD)"] = 0
 
-# ===============================
+
 # 8. FINAL QC
-# ===============================
+
 
 print("\nFinal missing values:")
 print(df_pp.isnull().sum())
@@ -92,12 +92,12 @@ print(df_pp.isnull().sum())
 print("\nFinal cleaned dataset statistics:")
 print(df_pp.describe())
 
-# ===============================
+
 # 9. SAVE FINAL CLEAN FILE
-# ===============================
+
 
 df_pp.to_csv("task2_1_cleaned_poroperm_FINAL.csv", index=False)
-print("\n✅ Final cleaned file saved as task2_1_cleaned_poroperm_FINAL.csv")
+print("\n Final cleaned file saved as task2_1_cleaned_poroperm_FINAL.csv")
 
 #Task 2.2
 import pandas as pd
@@ -106,9 +106,9 @@ import seaborn as sns
 import numpy as np
 from scipy import stats
 
-# ===============================
+
 # 1. LOAD CLEANED DATASET
-# ===============================
+
 
 df = pd.read_csv("task2_1_cleaned_poroperm_FINAL.csv")
 
@@ -118,9 +118,9 @@ print(df.info())
 # Clean facies labels (remove quotes)
 df["Facies"] = df["Facies"].str.replace("'", "").str.strip()
 
-# ===============================
+
 # 2. POROSITY vs PERMEABILITY CROSSPLOT (FACIES-COLORED)
-# ===============================
+
 
 plt.figure(figsize=(8,6))
 sns.scatterplot(
@@ -140,9 +140,9 @@ plt.grid(True, which="both", linestyle="--", alpha=0.5)
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 3. HISTOGRAMS BY FACIES
-# ===============================
+
 
 facies_list = df["Facies"].unique()
 
@@ -181,9 +181,9 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 4. BOX PLOTS (FACIES COMPARISON)
-# ===============================
+
 
 plt.figure(figsize=(12,5))
 
@@ -201,9 +201,9 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 5. P–P (PROBABILITY–PROBABILITY) PLOTS
-# ===============================
+
 
 plt.figure(figsize=(12,5))
 
@@ -218,9 +218,9 @@ plt.title("P–P Plot: Permeability")
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 6. DEPTH vs POROSITY & PERMEABILITY
-# ===============================
+
 
 plt.figure(figsize=(12,5))
 
@@ -259,9 +259,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-# ===============================
+
 # 1. LOAD CLEANED DATA
-# ===============================
+
 
 df = pd.read_csv("task2_1_cleaned_poroperm_FINAL.csv")
 
@@ -271,10 +271,10 @@ df["Facies"] = df["Facies"].str.replace("'", "").str.strip()
 print(df.head())
 print(df.info())
 
-# ===============================
+
 # 2. SUPERVISED LEARNING: LINEAR REGRESSION
 # Predict permeability from porosity
-# ===============================
+
 
 X = df[["Porosity (%)"]].values
 y = df["Permeability (mD)"].values
@@ -307,9 +307,9 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 3. UNSUPERVISED LEARNING: K-MEANS CLUSTERING
-# ===============================
+
 
 X_cluster = df[["Porosity (%)", "Permeability (mD)"]].values
 
@@ -342,11 +342,11 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 4. FACIES CLASSIFICATION (SUPERVISED)
 # Features → Porosity & Permeability
 # Target → Facies
-# ===============================
+
 
 X_class = df[["Porosity (%)", "Permeability (mD)"]]
 y_class = df["Facies"]
@@ -359,9 +359,9 @@ X_train, X_test, y_train, y_test = train_test_split(
     X_class, y_encoded, test_size=0.2, random_state=42
 )
 
-# ===============================
+
 # 4A. RANDOM FOREST CLASSIFIER
-# ===============================
+
 
 rf = RandomForestClassifier(random_state=42)
 rf.fit(X_train, y_train)
@@ -388,9 +388,9 @@ plt.title("Random Forest Confusion Matrix")
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 4B. SUPPORT VECTOR MACHINE (SVM)
-# ===============================
+
 
 svm = SVC(kernel="rbf")
 svm.fit(X_train, y_train)
@@ -417,9 +417,9 @@ plt.title("SVM Confusion Matrix")
 plt.tight_layout()
 plt.show()
 
-# ===============================
+
 # 4C. MULTI-LAYER PERCEPTRON (ANN)
-# ===============================
+
 
 mlp = MLPClassifier(
     hidden_layer_sizes=(50,50),
