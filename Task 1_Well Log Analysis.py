@@ -262,7 +262,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 
-print("\n✅ Task 1.2 Visualization (FIXED & SCALED) Completed Successfully")
+print("\n Task 1.2 Visualization (FIXED & SCALED) Completed Successfully")
 
 # Task 1.3
 
@@ -277,7 +277,7 @@ from skimage.util import img_as_float
 # 1. IMPORT IMAGE
 
 
-# ✅ CHANGE THIS TO YOUR LOCAL IMAGE PATH
+#  CHANGE THIS TO YOUR LOCAL IMAGE PATH
 img_path = "berea8bit.tif"   # example: put your real file here
 
 img = io.imread(img_path)
@@ -323,7 +323,7 @@ plt.show()
 threshold = filters.threshold_otsu(denoised)
 binary = denoised < threshold   # pores = dark regions
 
-# ✅ MORPHOLOGICAL CLEANING (IMPORTANT FOR GRADING)
+#  MORPHOLOGICAL CLEANING (IMPORTANT FOR GRADING)
 binary = morphology.remove_small_objects(binary, min_size=30)
 binary = morphology.remove_small_holes(binary, area_threshold=30)
 
