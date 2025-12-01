@@ -1,7 +1,4 @@
 #Task 3.1
-# =============================================================
-# PETE 219 – TASK 3.1: CT IMAGE DATA IMPORT & PREPROCESSING
-# =============================================================
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,17 +6,17 @@ from skimage import io, filters, morphology, exposure
 from skimage.restoration import denoise_nl_means, estimate_sigma
 from skimage.util import img_as_float
 
-# -------------------------------------------------------------
-# 1. IMPORT CT IMAGE
-# -------------------------------------------------------------
 
-# ✅ CHANGE THIS TO YOUR LOCAL IMAGE PATH
+# 1. IMPORT CT IMAGE
+
+
+#  CHANGE THIS TO YOUR LOCAL IMAGE PATH
 img_path = "berea8bit.tif"    # Example file
 img = io.imread(img_path)
 
-# -------------------------------------------------------------
+
 # 2. ENSURE GRAYSCALE & FLOAT FORMAT
-# -------------------------------------------------------------
+
 
 if img.ndim == 3:                 # If RGB image
     img = img[:, :, 0]            # Convert to grayscale
@@ -33,9 +30,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 3. NOISE REDUCTION (NON-LOCAL MEANS FILTER)
-# -------------------------------------------------------------
+
 
 sigma_est = np.mean(estimate_sigma(img, channel_axis=None))
 
@@ -54,9 +51,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 4. INTENSITY NORMALIZATION (CONTRAST STRETCHING)
-# -------------------------------------------------------------
+
 
 p2, p98 = np.percentile(img_denoised, (2, 98))
 img_normalized = exposure.rescale_intensity(
@@ -71,9 +68,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 5. EDGE & SMALL NOISE CLEANUP (MEDIAN + MORPHOLOGY)
-# -------------------------------------------------------------
+
 
 img_smooth = filters.median(img_normalized, morphology.disk(2))
 
@@ -84,38 +81,38 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 6. SAVE PREPROCESSED IMAGE FOR TASK 3.2
-# -------------------------------------------------------------
+
 
 io.imsave("task3_1_preprocessed_ct.png", img_smooth)
 
-print("\n✅ Task 3.1 Completed Successfully")
+print("\n Task 3.1 Completed Successfully")
 print("Preprocessed image saved as: task3_1_preprocessed_ct.png")
 
 #Task 3.2
-# =============================================================
+
 # PETE 219 – TASK 3.2: CT IMAGE SEGMENTATION & VISUALIZATION (FINAL)
-# =============================================================
+
 
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, filters, measure, morphology
 from skimage.util import img_as_float
 
-# -------------------------------------------------------------
-# 0. LOAD PREPROCESSED IMAGE FROM TASK 3.1 (RECOMMENDED)
-# -------------------------------------------------------------
 
-# ✅ Use your preprocessed image from Task 3.1
+# 0. LOAD PREPROCESSED IMAGE FROM TASK 3.1 (RECOMMENDED)
+
+
+#  Use your preprocessed image from Task 3.1
 img_path = "task3_1_preprocessed_ct.png"
 img = io.imread(img_path, as_gray=True)
 
 img = img_as_float(img)
 
-# -------------------------------------------------------------
+
 # 1. DISPLAY PREPROCESSED GRAYSCALE IMAGE
-# -------------------------------------------------------------
+
 
 plt.figure(figsize=(6, 6))
 plt.imshow(img, cmap="gray")
@@ -124,9 +121,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 2. PIXEL INTENSITY HISTOGRAM
-# -------------------------------------------------------------
+
 
 plt.figure(figsize=(6, 4))
 plt.hist(img.ravel(), bins=256, edgecolor="black")
@@ -136,14 +133,14 @@ plt.ylabel("Frequency")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 3. BINARY SEGMENTATION (OTSU THRESHOLD)
-# -------------------------------------------------------------
+
 
 thresh = filters.threshold_otsu(img)
 binary = img < thresh   # pores = dark regions
 
-# ✅ Morphological cleanup for grading quality
+#  Morphological cleanup for grading quality
 binary = morphology.remove_small_objects(binary, min_size=40)
 binary = morphology.remove_small_holes(binary, area_threshold=40)
 
@@ -154,9 +151,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 4. LABELED PORE REGIONS (CONNECTED COMPONENTS)
-# -------------------------------------------------------------
+
 
 labeled = measure.label(binary, connectivity=2)
 
@@ -167,9 +164,9 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 5. PORE SIZE HEATMAP (EQUIVALENT DIAMETER)
-# -------------------------------------------------------------
+
 
 props = measure.regionprops(labeled)
 
@@ -189,30 +186,30 @@ cbar.set_label("Equivalent Diameter (pixels)")
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 6. SAVE SEGMENTED OUTPUTS FOR TASK 3.3
-# -------------------------------------------------------------
+
 
 io.imsave("task3_2_binary_pores.png", binary.astype(np.uint8) * 255)
 io.imsave("task3_2_labeled_pores.png", labeled.astype(np.uint16))
 
-print("\n✅ Task 3.2 Completed Successfully")
+print("\n Task 3.2 Completed Successfully")
 print("Binary image saved as: task3_2_binary_pores.png")
 print("Labeled pore image saved as: task3_2_labeled_pores.png")
 
 #Task 3.3
-# =============================================================
+
 # PETE 219 – TASK 3.3: CT-BASED POROSITY & PERMEABILITY
-# =============================================================
+
 
 import numpy as np
 import matplotlib.pyplot as plt
 from skimage import io, measure
 from skimage.util import img_as_float
 
-# -------------------------------------------------------------
+
 # 0. LOAD BINARY & LABELED IMAGES FROM TASK 3.2
-# -------------------------------------------------------------
+
 
 binary_path = "task3_2_binary_pores.png"
 labeled_path = "task3_2_labeled_pores.png"
@@ -223,9 +220,9 @@ labeled = io.imread(labeled_path)
 # make sure binary is 0/1 (pores = 1)
 binary = img_as_float(binary_img) > 0.5
 
-# -------------------------------------------------------------
+
 # 1. IMAGE-BASED POROSITY
-# -------------------------------------------------------------
+
 
 pore_pixels = np.sum(binary)
 total_pixels = binary.size
@@ -235,9 +232,9 @@ print("\n============================")
 print(f"IMAGE-BASED POROSITY = {phi*100:.2f}%")
 print("============================\n")
 
-# -------------------------------------------------------------
+
 # 2. PORE SIZE STATISTICS (EQUIVALENT DIAMETER)
-# -------------------------------------------------------------
+
 
 props = measure.regionprops(labeled)
 
@@ -258,10 +255,10 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# -------------------------------------------------------------
+
 # 3. KOZENY–CARMAN PERMEABILITY ESTIMATE
 #    k = (d^2 * phi^3) / [180 * (1 - phi)^2]
-# -------------------------------------------------------------
+
 # NOTE: You MUST set the pixel size in meters based on the CT scanner.
 # Example: if 1 pixel = 10 micrometers, then:
 # pixel_size_m = 10e-6
@@ -284,9 +281,9 @@ print(f"Estimated k          = {k_m2:.3e} m^2")
 k_mD = k_m2 / 9.869e-16
 print(f"Estimated k          = {k_mD:.1f} mD")
 
-# -------------------------------------------------------------
+
 # 4. SAVE SUMMARY TO TEXT FILE (OPTIONAL BUT NICE)
-# -------------------------------------------------------------
+
 
 with open("task3_3_ct_results_summary.txt", "w") as f:
     f.write("PETE 219 – Task 3.3 CT Quantitative Results\n")
@@ -301,5 +298,5 @@ with open("task3_3_ct_results_summary.txt", "w") as f:
     f.write(f"Kozeny–Carman k: {k_m2:.3e} m^2\n")
     f.write(f"Kozeny–Carman k: {k_mD:.1f} mD\n")
 
-print("\n✅ Task 3.3 Completed Successfully")
+print("\n Task 3.3 Completed Successfully")
 print("Summary written to: task3_3_ct_results_summary.txt")
